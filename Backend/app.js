@@ -167,7 +167,7 @@ app.get("/medicinefinder", (req, res, next) => {
 app.get('/medicinetracker', isAuthenticated, async (req, res, next) => {
   try {
     const labTests = await LabTest.find({ user: req.user._id }).sort({ testDate: -1 });
-    res.render('medicinetracker', { user: req.user, labTests });
+    res.render('tracker.ejs', { user: req.user, labTests });
   } catch (err) {
     next(err);
   }
