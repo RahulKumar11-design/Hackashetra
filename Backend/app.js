@@ -204,7 +204,6 @@ app.get("/logout", (req, res, next) => {
 // API routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/lab-tests', require('./routes/labTests'));
-app.use('/api/wellbeing', require('./routes/wellbeing'));
 
 // Authentication error handler
 app.use((err, req, res, next) => {
