@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare+ | Smart Healthcare Solutions</title>
+    <link rel="stylesheet" href="/home.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .user-menu {
+            position: relative;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4a90e2;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .avatar:hover {
+            background-color: #357abd;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 220px;
+            display: none;
+            z-index: 1000;
+            margin-top: 10px;
+        }
+
+        .user-dropdown.active {
+            display: block;
+        }
+
+        .user-info {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-name {
+            display: block;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .user-email {
+            display: block;
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .user-dropdown ul {
+            list-style: none;
+            padding: 8px 0;
+            margin: 0;
+        }
+
+        .user-dropdown ul li {
+            padding: 0;
+        }
+
+        .user-dropdown ul li a {
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .user-dropdown ul li a:hover {
+            background-color: #f5f5f5;
+        }
+
+        .user-dropdown ul li a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .user-dropdown .divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 8px 0;
+        }
+
+        .logout-btn {
+            color: #dc3545 !important;
+        }
+
+        .logout-btn:hover {
+            background-color: #fff5f5 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>MediCare<span class="plus">+</span></h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#aboutus">About Us</a></li>
+                    <li><a href="/support">Support</a></li>
+                </ul>
+            </nav>
+            <% if(!user) { %>
+                <div class="auth-buttons">
+                    <a href="/login" class="btn btn-outline">Log In</a>
+                    <a href="/register" class="btn btn-primary">Sign Up</a>
+                </div>
+            <% } else { %>
+                <div class="user-menu">
+                    <div class="avatar" id="userMenuBtn"><%= user.name[0] %></div>
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="user-info">
+                            <span class="user-name"><%= user.name %></span>
+                            <span class="user-email"><%= user.email %></span>
+                        </div>
+                        <ul>
+                            <li><a href="/profile"><i class="fas fa-user"></i> Profile</a></li>
+                            <li><a href="/medicinetracker"><i class="fas fa-pills"></i> Medicine Tracker</a></li>
+                            <li><a href="/medicinefinder"><i class="fas fa-search"></i> Medicine Finder</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            <% } %>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Revolutionizing Healthcare Access and Management</h1>
+                <p>Your all-in-one platform for affordable medicine, real-time patient monitoring,
+                   and emergency assistance designed to save lives and reduce healthcare costs.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary btn-lg">Get Started</a>
+                    <a href="#" class="btn btn-outline btn-lg">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="/api/placeholder/600/500" alt="Healthcare Dashboard" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Assistance Button (Fixed) -->
+    <div class="emergency-button">
+        <button id="emergencyBtn" class="pulse">
+            <i class="fas fa-ambulance"></i>
+            Emergency Help
+        </button>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Key Features</h2>
+                <p>Discover how MediCare+ is transforming healthcare delivery</p>
+            </div>
+
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <h3>Affordable Medicine Finder</h3>
+                    <p>Find cost-effective alternatives to your prescribed medications,
+                       with the same composition but at a fraction of the cost.</p>
+                    <a href="/medicinefinder" class="feature-link">Find Medicines <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Medicine Tracker</h3>
+                    <p>Never miss a dose with smart reminders, refill alerts,
+                       and a comprehensive record of your medical history.</p>
+                    <a href="/medicinetracker" class="feature-link">Track Medicines <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>Patient Monitoring</h3>
+                    <p>Real-time monitoring for hospital and home care patients,
+                       with alerts for unusual movements or emergencies.</p>
+                    <a href="#" class="feature-link">Start Monitoring <i class="fas fa-arrow-right"></i></a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Location-Based Assistance</h3>
+                    <p>Connect with nearby medical facilities and specialists
+                       for quick emergency response and regular consultations.</p>
+                    <a href="#" class="feature-link">Find Help Nearby <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>Simple steps to better healthcare management</p>
+            </div>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Create Your Account</h3>
+                    <p>Sign up and set up your health profile with essential details</p>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Enter Your Medications</h3>
+                    <p>Add your prescriptions to find alternatives and set reminders</p>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Set Up Monitoring</h3>
+                    <p>Configure patient monitoring for yourself or a loved one</p>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Get Personalized Care</h3>
+                    <p>Receive alerts, reminders and connect with healthcare services</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>Success Stories</h2>
+                <p>Hear from people who have transformed their healthcare experience</p>
+            </div>
+
+            <div class="testimonial-slider" id="testimonialSlider">
+                <div class="testimonial-slide active">
+                    <div class="testimonial-content">
+                        <div class="quote">"MediCare+ helped me find medications that cost 70% less than what I was paying before. The medicine tracker ensures I never miss a dose."</div>
+                        <div class="testimonial-author">
+                            <div class="author-image">
+                                <img src="/api/placeholder/60/60" alt="Testimonial Author" />
+                            </div>
+                            <div class="author-info">
+                                <h4>Samantha K.</h4>
+                                <p>Diabetes patient</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-slide">
+                    <div class="testimonial-content">
+                        <div class="quote">"The patient monitoring feature has been a lifesaver for my bedridden father. I receive alerts whenever he needs assistance, giving me peace of mind."</div>
+                        <div class="testimonial-author">
+                            <div class="author-image">
+                                <img src="/api/placeholder/60/60" alt="Testimonial Author" />
+                            </div>
+                            <div class="author-info">
+                                <h4>Robert M.</h4>
+                                <p>Caregiver</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-slide">
+                    <div class="testimonial-content">
+                        <div class="quote">"During an emergency, the location-based assistance connected me with a nearby clinic within minutes. The quick response made all the difference."</div>
+                        <div class="testimonial-author">
+                            <div class="author-image">
+                                <img src="/api/placeholder/60/60" alt="Testimonial Author" />
+                            </div>
+                            <div class="author-info">
+                                <h4>Elena T.</h4>
+                                <p>Heart patient</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-controls">
+                <div class="testimonial-dots">
+                    <span class="dot active" onclick="currentSlide(0)"></span>
+                    <span class="dot" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                </div>
+                <div class="testimonial-arrows">
+                    <button class="arrow prev" onclick="changeSlide(-1)">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="arrow next" onclick="changeSlide(1)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Transform Your Healthcare Experience?</h2>
+                <p>Join thousands of users who are saving money and improving their health outcomes with MediCare+.</p>
+                <a href="#" class="btn btn-primary btn-lg">Get Started Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid" id="#aboutus">
+                <div class="footer-about">
+                    <h3>MediCare<span class="plus">+</span></h3>
+                    <p>Revolutionizing healthcare with technology to make medical services more accessible, affordable, and efficient for everyone.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Features</h4>
+                    <ul>
+                        <li><a href="#">Medicine Finder</a></li>
+                        <li><a href="#">Medicine Tracker</a></li>
+                        <li><a href="#">Patient Monitoring</a></li>
+                        <li><a href="#">Emergency Assistance</a></li>
+                        <li><a href="#">Community Support</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-envelope"></i> info@medicare-plus.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Healthcare Ave, Medical District</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 MediCare+. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Emergency Modal -->
+    <div id="emergencyModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2><i class="fas fa-ambulance"></i> Emergency Assistance</h2>
+            <p>What type of emergency assistance do you need?</p>
+
+            <div class="emergency-options">
+                <a href="#" class="emergency-option">
+                    <i class="fas fa-phone"></i>
+                    <span>Call Ambulance</span>
+                </a>
+                <a href="#" class="emergency-option">
+                    <i class="fas fa-user-md"></i>
+                    <span>Connect to Doctor</span>
+                </a>
+                <a href="#" class="emergency-option">
+                    <i class="fas fa-hospital"></i>
+                    <span>Nearby Hospitals</span>
+                </a>
+                <a href="#" class="emergency-option">
+                    <i class="fas fa-first-aid"></i>
+                    <span>First Aid Guide</span>
+                </a>
+            </div>
+
+            <div class="emergency-location">
+                <p><i class="fas fa-map-marker-alt"></i> We'll use your current location to find help nearby.</p>
+                <button class="btn btn-primary btn-block">Share My Location</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+    <script>
+        // User dropdown functionality
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userDropdown = document.getElementById('userDropdown');
+
+        if (userMenuBtn && userDropdown) {
+            userMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                userDropdown.classList.toggle('active');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!userDropdown.contains(e.target)) {
+                    userDropdown.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

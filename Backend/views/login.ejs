@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="log.css">
+</head>
+<body>
+  <div class="background">
+    <div class="login-container">
+      <h2>Login</h2>
+      <form action="/api/auth/login" method="post" autocomplete="off">
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter your email" name="email" required autocomplete="off">
+        </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" name="password" required minlength="8" autocomplete="off">
+        </div>
+        <button type="submit">Log in</button>
+        <p>Don't have an account? <a href="/register">Register</a></p>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    // Prevent form resubmission on page refresh
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+  </script>
+</body>
+</html>

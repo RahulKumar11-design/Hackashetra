@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Support and Motivation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f8ff;
+            color: #333;
+        }
+        
+        header {
+            background-color: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .section-title {
+            color: #1a1a2e;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #0f52ba;
+        }
+        
+        /* Live Sessions Section */
+        .live-sessions {
+            background-color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sessions-container {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .upcoming-sessions {
+            flex: 3;
+        }
+        
+        .session-card {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0f52ba;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .session-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .session-title {
+            color: #0f52ba;
+            margin-bottom: 0.5rem;
+        }
+        
+        .session-info {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .session-date {
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        
+        .session-time {
+            color: #555;
+        }
+        
+        .session-description {
+            margin-top: 0.5rem;
+            color: #555;
+        }
+        
+        .attend-section {
+            flex: 2;
+            background-color: #1a1a2e;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .attend-title {
+            color: white;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .zoom-info {
+            background-color: #0f52ba;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        
+        .attend-button {
+            display: block;
+            width: 100%;
+            background-color: #0f52ba;
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .attend-button:hover {
+            background-color: #0d47a1;
+        }
+        
+        /* Government Guidelines Section */
+        .government-guidelines {
+            padding: 2rem 0;
+        }
+        
+        .guidelines-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .guideline-card {
+            flex: 1 1 calc(33.333% - 1.5rem);
+            min-width: 250px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .guideline-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .guideline-header {
+            background-color: #0f52ba;
+            color: white;
+            padding: 1rem;
+        }
+        
+        .guideline-body {
+            padding: 1rem;
+        }
+        
+        .guideline-link {
+            display: block;
+            text-align: right;
+            color: #0f52ba;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+        
+        .guideline-link:hover {
+            text-decoration: underline;
+        }
+        .options{
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            grid-template-rows: repeat(2,1fr);
+            row-gap:1rem;
+            margin:auto;
+        }
+        .option-button{
+            padding:0.3rem 0.5rem;
+            width:20vw;
+            background-color: blue;
+            color:white;
+            font-size: 1rem;
+        }
+        footer {
+            background-color: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Patient Support Portal</h1>
+            <p>Connect, Learn, and Recover Together</p>
+        </div>
+    </header>
+
+    <!-- Live Sessions Section -->
+    <section class="live-sessions">
+        <div class="container">
+            <h2 class="section-title">Live Sessions with Recovered Patients</h2>
+            <div class="sessions-container">
+                <div class="upcoming-sessions">
+                    <!-- Session 1 -->
+                    <div class="session-card">
+                        <h3 class="session-title">Life After Cancer: My Journey to Recovery</h3>
+                        <div class="session-info">
+                            <span class="session-date">March 5, 2025</span>
+                            <span class="session-time">2:00 PM - 3:30 PM EST</span>
+                        </div>
+                        <p class="session-description">Join John Miller as he shares his inspiring journey through cancer treatment and how he rebuilt his life after recovery.</p>
+                    </div>
+
+                    <!-- Session 2 -->
+                    <div class="session-card">
+                        <h3 class="session-title">Managing Diabetes: Lifestyle Changes That Work</h3>
+                        <div class="session-info">
+                            <span class="session-date">March 10, 2025</span>
+                            <span class="session-time">5:00 PM - 6:00 PM EST</span>
+                        </div>
+                        <p class="session-description">Dr. Sarah Johnson and recovered patient Robert Davis discuss practical lifestyle adjustments for diabetes management.</p>
+                    </div>
+
+                    <!-- Session 3 -->
+                    <div class="session-card">
+                        <h3 class="session-title">Heart Attack Survivors Support Group</h3>
+                        <div class="session-info">
+                            <span class="session-date">March 15, 2025</span>
+                            <span class="session-time">1:00 PM - 2:30 PM EST</span>
+                        </div>
+                        <p class="session-description">A panel of heart attack survivors share their stories and answer questions about recovery and lifestyle changes.</p>
+                    </div>
+
+                    <!-- Session 4 -->
+                    <div class="session-card">
+                        <h3 class="session-title">Mental Health Recovery: Breaking the Stigma</h3>
+                        <div class="session-info">
+                            <span class="session-date">March 22, 2025</span>
+                            <span class="session-time">4:00 PM - 5:30 PM EST</span>
+                        </div>
+                        <p class="session-description">Lisa Wong discusses her journey through depression and anxiety, and how she found healing through therapy and community support.</p>
+                    </div>
+
+                    <!-- Session 5 -->
+                    <div class="session-card">
+                        <h3 class="session-title">Living with Chronic Pain: Strategies and Hope</h3>
+                        <div class="session-info">
+                            <span class="session-date">March 28, 2025</span>
+                            <span class="session-time">3:00 PM - 4:00 PM EST</span>
+                        </div>
+                        <p class="session-description">Michael Torres shares practical strategies for managing chronic pain and maintaining quality of life after a serious back injury.</p>
+                    </div>
+                </div>
+
+                <div class="attend-section">
+                    <h3 class="attend-title">Join Our Live Sessions</h3>
+                    <p>Connect with recovered patients and healthcare professionals to gain insights, ask questions, and find support.</p>
+                    
+                    <div class="zoom-info">
+                        <p><strong>Zoom Meeting ID:</strong> 123 456 7890</p>
+                        <p><strong>Password:</strong> Healing2025</p>
+                        <p><strong>Link:</strong> https://zoom.us/j/1234567890</p>
+                    </div>
+                    
+                    <button class="attend-button">Attend a Live Session</button>
+                </div>
+            </div>
+        </div>
+    </section>
+<section class="guidelines">
+    <div class="container"></div>
+    <h2 class="section-title">Government Guidelines for Patient Benefits</h2>
+    <div class="options">
+        <div class="option">
+            <button class="option-button">Medical Insurance Benifit</button>
+        </div>
+        <div class="option">
+            <button class="option-button">Disability Support Programs</button>
+        </div>
+        <div class="option">
+            <button class="option-button"> Prescription Assistance</button>
+        </div>
+        <div class="option">
+            <button class="option-button">Mental Health Resources</button>
+        </div>
+        <div class="option">
+            <button class="option-button">Caregiver Support</button>
+        </div>
+        <div class="option">
+            <button class="option-button">Hospital Bill Assistance</button>
+        </div>
+    </div>
+</section>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Patient Support Portal. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

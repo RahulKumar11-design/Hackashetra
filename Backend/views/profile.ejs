@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HealthGuard Dashboard</title>
+  <link rel="stylesheet" href="profile.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* User Menu Styles */
+    .user-menu {
+      position: relative;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #4a90e2;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .avatar:hover {
+      background-color: #357abd;
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 220px;
+      display: none;
+      z-index: 1000;
+      margin-top: 10px;
+    }
+
+    .user-dropdown.active {
+      display: block;
+    }
+
+    .user-info {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .user-name {
+      display: block;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .user-email {
+      display: block;
+      font-size: 0.9em;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .user-dropdown ul {
+      list-style: none;
+      padding: 8px 0;
+      margin: 0;
+    }
+
+    .user-dropdown ul li {
+      padding: 0;
+    }
+
+    .user-dropdown ul li a {
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      color: #333;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .user-dropdown ul li a:hover {
+      background-color: #f5f5f5;
+    }
+
+    .user-dropdown ul li a i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .user-dropdown .divider {
+      height: 1px;
+      background-color: #eee;
+      margin: 8px 0;
+    }
+
+    .logout-btn {
+      color: #dc3545 !important;
+    }
+
+    .logout-btn:hover {
+      background-color: #fff5f5 !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <span class="logo-icon">💊</span>
+        Profile
+      </div>
+      <div class="top-nav">
+        <a href="#" class="nav-item">Dashboard</a>
+        <a href="#" class="nav-item">Medicines</a>
+        <a href="#" class="nav-item">Monitoring</a>
+        <button class="theme-toggle" id="theme-toggle">🌙</button>
+        <div class="user-menu">
+          <div class="avatar" id="userMenuBtn"><%= user.name[0] %></div>
+          <div class="user-dropdown" id="userDropdown">
+            <div class="user-info">
+              <span class="user-name"><%= user.name %></span>
+              <span class="user-email"><%= user.email %></span>
+            </div>
+            <ul>
+              <li><a href="/profile" class="active"><i class="fas fa-user"></i> Profile</a></li>
+              <li><a href="/medicinetracker"><i class="fas fa-pills"></i> Medicine Tracker</a></li>
+              <li><a href="/medicinefinder"><i class="fas fa-search"></i> Medicine Finder</a></li>
+              <li class="divider"></li>
+              <li><a href="/logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="dashboard-grid">
+      <!-- <div class="dashboard-header">
+        <h1 class="dashboard-title">Health Dashboard</h1>
+        <div class="quick-actions">
+          <button class="btn btn-outline">Export Report</button>
+          <button class="btn btn-primary">Add Data</button>
+        </div>
+      </div> -->
+
+      <!-- Health Score -->
+      <div class="card health-score">
+        <div class="score-circle">
+          <span class="score-value">87</span>
+        </div>
+        <div class="score-label">Your Health Score</div>
+        <div class="score-label">Above average for your age group</div>
+      </div>
+
+      <!-- Medication Compliance -->
+      <div class="card medication-card">
+        <h3 class="card-title">
+          <span class="card-icon">💊</span>
+          Medication Compliance
+        </h3>
+        <div class="progress-container">
+          <div class="progress-label">
+            <span>Morning</span>
+            <span>100%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill fill-success" style="width: 100%"></div>
+          </div>
+        </div>
+        <div class="progress-container">
+          <div class="progress-label">
+            <span>Afternoon</span>
+            <span>75%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill fill-primary" style="width: 75%"></div>
+          </div>
+        </div>
+        <div class="progress-container">
+          <div class="progress-label">
+            <span>Evening</span>
+            <span>50%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill fill-warning" style="width: 50%"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Medical Information Section -->
+      <div class="card medical-info-card">
+        <h3 class="card-title">Medical Details</h3>
+        <p><strong>Blood Group:</strong> <%= user.bloodGroup || 'Unknown' %></p>
+        <p><strong>Allergies:</strong> <%= user.allergies.length ? user.allergies.join(', ') : 'None' %></p>
+        <p><strong>Chronic Conditions:</strong> <%= user.chronicConditions.length ? user.chronicConditions.join(', ') : 'None' %></p>
+      </div>
+
+      <!-- User Information Section -->
+      <div class="card user-info-card">
+        <h3 class="card-title">User Profile</h3>
+        <div class="user-details">
+          <p><strong>Name:</strong> <%= user.name %></p>
+          <p><strong>Email:</strong> <%= user.email %></p>
+          <p><strong>Phone:</strong> <%= user.phoneNumber || 'N/A' %></p>
+          <p><strong>Gender:</strong> <%= user.gender || 'Not specified' %></p>
+          <p><strong>Date of Birth:</strong> <%= user.dateOfBirth ? user.dateOfBirth.toDateString() : 'N/A' %></p>
+        </div>
+      </div>
+      <!-- Address Information Section -->
+      <div class="card address-info-card">
+        <h3 class="card-title">Emergency Contact Address</h3>
+        <% if (user.address) { %>
+          <p><strong>Street:</strong> <%= user.address.street || 'N/A' %></p>
+          <p><strong>City:</strong> <%= user.address.city || 'N/A' %></p>
+          <p><strong>State:</strong> <%= user.address.state || 'N/A' %></p>
+          <p><strong>Postal Code:</strong> <%= user.address.postalCode || 'N/A' %></p>
+          <p><strong>Country:</strong> <%= user.address.country || 'N/A' %></p>
+        <% } else { %>
+          <p>No address information available.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const toggleButton = document.getElementById('theme-toggle');
+    let darkMode = localStorage.getItem('theme') === 'dark';
+
+    if (darkMode) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      toggleButton.textContent = '☀️';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      toggleButton.textContent = '🌙';
+    }
+
+    toggleButton.addEventListener('click', () => {
+      darkMode = !darkMode;
+      document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+      localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+      toggleButton.textContent = darkMode ? '☀️' : '🌙';
+    });
+
+    // User dropdown functionality
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    const userDropdown = document.getElementById('userDropdown');
+
+    if (userMenuBtn && userDropdown) {
+      userMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userDropdown.classList.toggle('active');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!userDropdown.contains(e.target)) {
+          userDropdown.classList.remove('active');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
