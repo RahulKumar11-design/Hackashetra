@@ -60,7 +60,7 @@ router.post('/', isAuthenticated, upload.single('testFile'), async (req, res) =>
         });
 
         await labTest.save();
-        res.status(201).json(labTest);
+        res.redirect("/home");
     } catch (error) {
         if (req.file) {
             await fs.unlink(req.file.path).catch(console.error);
@@ -75,7 +75,7 @@ router.get('/', isAuthenticated, async (req, res) => {
     try {
         const labTests = await LabTest.find({ user: req.user._id })
             .sort({ testDate: -1 });
-        res.json(labTests);
+        res.redirect("/medicinetracker");
     } catch (error) {
         console.error('Error fetching lab tests:', error);
         res.status(500).json({ message: 'Error fetching lab tests' });
