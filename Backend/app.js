@@ -1,92 +1,37 @@
-// app.js
+require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
-const path = require('path');
-const {isAuthenticated} = require('./middleware');
+const {isAuthenticated,check,aftercheck} = require('./middleware');
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const User = require("./models/User.js");
-const LabTest = require('./models/LabTest');
-const fs = require('fs').promises;
-
+const path = require("path");
+const {storage} = require("./cloudConfig.js");
+const multer = require("multer");
+const upload = multer({storage});
+const LabTest = require("./models/LabTest.js");
 // Initialize app
 const app = express();
-
-// Create uploads directory if it doesn't exist
-(async () => {
-    try {
-        await fs.mkdir('uploads', { recursive: true });
-        console.log('Uploads directory ready');
-    } catch (error) {
-        console.error('Error creating uploads directory:', error);
-    }
-})();
 
 // Connect to MongoDB with proper error handling
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/healthcare', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect('mongodb://127.0.0.1:27017/healthcare');
     console.log('MongoDB connected successfully');
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
-    // Exit process with failure
-    process.exit(1);
   }
 };
 
 connectDB();
 
-// Handle MongoDB connection errors after initial connection
-mongoose.connection.on('error', err => {
-  console.error('MongoDB connection error:', err);
-});
-
-mongoose.connection.on('disconnected', () => {
-  console.log('MongoDB disconnected. Attempting to reconnect...');
-});
-
-// Handle process termination
-process.on('SIGINT', async () => {
-  try {
-    await mongoose.connection.close();
-    console.log('MongoDB connection closed through app termination');
-    process.exit(0);
-  } catch (err) {
-    console.error('Error during MongoDB connection closure:', err);
-    process.exit(1);
-  }
-});
-
-// Body parser with error handling
-app.use((err, req, res, next) => {
-  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
-    return res.status(400).json({ message: 'Invalid JSON payload' });
-  }
-  next();
-});
-
-app.use(express.json({ limit: '10kb' })); // Limit payload size
-app.use(express.urlencoded({extended: true, limit: '10kb'}));
+app.use(express.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
-
-// Serve uploaded files with error handling
-app.use('/uploads', (req, res, next) => {
-  express.static(path.join(__dirname, 'uploads'))(req, res, err => {
-    if (err) {
-      res.status(404).json({ message: 'File not found' });
-    } else {
-      next();
-    }
-  });
-});
 
 // Session config
 app.use(session({
@@ -166,11 +111,23 @@ app.get("/medicinefinder", (req, res, next) => {
 
 app.get('/medicinetracker', isAuthenticated, async (req, res, next) => {
   try {
-    const labTests = await LabTest.find({ user: req.user._id }).sort({ testDate: -1 });
+    const labTests = await LabTest.find({ owner: req.user._id });
+    console.log(labTests);
     res.render('tracker.ejs', { user: req.user, labTests });
   } catch (err) {
     next(err);
   }
+});
+app.post('/medicinetracker/lab-tests',check,upload.single("testfile"),aftercheck,async (req,res)=>{//
+  console.log(req.body,req.file.path);
+  const {testName,labName,testDate} = req.body;
+  const labtest = new LabTest({testName,labName,testDate});
+  labtest.fileUrl = req.file.path;
+  labtest.owner = req.user._id;
+  if(labtest){
+      await labtest.save().catch((err)=>console.log(err));
+  }
+  res.redirect("/medicinetracker");
 });
 
 app.get("/support", (req, res, next) => {
@@ -203,28 +160,6 @@ app.get("/logout", (req, res, next) => {
 
 // API routes
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/lab-tests', require('./routes/labTests'));
-
-// Authentication error handler
-app.use((err, req, res, next) => {
-  if (err.name === 'AuthenticationError') {
-    return res.status(401).json({ message: 'Authentication failed' });
-  }
-  next(err);
-});
-
-// Session management
-app.use((req, res, next) => {
-  // Regenerate session when signing in to prevent session fixation
-  if (req.method === 'POST' && req.path === '/api/auth/login') {
-    req.session.regenerate((err) => {
-      if (err) next(err);
-      next();
-    });
-    return;
-  }
-  next();
-});
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -260,30 +195,6 @@ app.use((err, req, res, next) => {
 
 // Start server with error handling
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
-
-// Handle server errors
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`Port ${PORT} is already in use`);
-  } else {
-    console.error('Server error:', err);
-  }
-  process.exit(1);
-});
-
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err) => {
-  console.error('Unhandled Promise Rejection:', err);
-  // Close server & exit process
-  server.close(() => process.exit(1));
-});
-
-// Handle uncaught exceptions
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-  // Close server & exit process
-  server.close(() => process.exit(1));
 });

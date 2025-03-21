@@ -71,6 +71,20 @@
                         </div>
                     </div>
                 </div>
+                <% if(user && labTests) {%>
+                    <% for(labtest of labTests){ %>
+                        <div class="test-item">
+                            <div class="test-info">
+                                <div class="test-name"><%= labtest.testName %></div>
+                                <div class="lab-name"><%= labtest.labName %></div>
+                                <div class="test-date"><%= labtest.testDate %></div>
+                            </div>
+                            <div class="test-action">
+                                <button><a href="<%=labtest.fileUrl%>">View</a></button>
+                            </div>
+                        </div>
+                    <% } %>
+                <% } %>
                 <div class="upload-footer">
                     <button class="upload-btn" id="upload-test-btn">UPLOAD RECORD</button>
                 </div>
@@ -144,37 +158,37 @@
         </div>
 
         <!-- Upload Test Modal -->
-        <div class="modal" id="upload-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">Upload Test Record</div>
-                    <button class="close-btn">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form id="upload-form" action="/api/lab-tests">
-                        <div class="form-group">
-                            <label class="form-label" for="test-name">Test Name</label>
-                            <input type="text" id="test-name" class="form-input" required name="testName">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="lab-name">Lab Name</label>
-                            <input type="text" id="lab-name" class="form-input" required name="labName">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="test-file">Choose File</label>
-                            <input type="file" id="test-file" class="form-input" accept=".pdf" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="test-date">Date of Test</label>
-                            <input type="date" id="test-date" class="form-input" required name="testDate">
-                        </div>
-                        <div class="modal-footer">
-                            <button class="form-submit-btn" id="upload-submit">UPLOAD TEST</button>
-                        </div>
-                    </form>
-                </div>
+    <div class="modal" id="upload-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Upload Test Record</div>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="upload-form" action="/medicinetracker/lab-tests" enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                        <label class="form-label" for="test-name">Test Name</label>
+                        <input type="text" id="test-name" class="form-input" name="testName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="lab-name">Lab Name</label>
+                        <input type="text" id="lab-name" class="form-input" name="labName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="test-file">Choose File</label>
+                        <input type="file" id="test-file" class="form-input" name="testfile" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="test-date">Date of Test</label>
+                        <input type="date" id="test-date" class="form-input" name="testDate">
+                    </div>
+                    <div class="modal-footer">
+                        <button class="form-submit-btn" id="upload-submit">UPLOAD TEST</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
         <!-- Test Questions Modal (CVD example) -->
         <div class="modal" id="cvd-test-modal">
@@ -639,8 +653,6 @@
             // 1. Validate form inputs
             // 2. Create FormData and send via AJAX
             // 3. Handle the response and update the UI
-
-            alert('Test record uploaded successfully!');
         });
 
         // Event listeners for all test buttons

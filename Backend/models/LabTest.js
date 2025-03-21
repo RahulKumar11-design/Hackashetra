@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const labTestSchema = new Schema({
-  user: {
+  owner: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
@@ -37,23 +37,6 @@ const labTestSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
-});
-
-// Add index for faster queries
-labTestSchema.index({ user: 1, testDate: -1 });
-
-// Clean up file when document is removed
-labTestSchema.pre('remove', async function(next) {
-  try {
-    const fs = require('fs').promises;
-    const path = require('path');
-    const filePath = path.join(__dirname, '..', this.fileUrl);
-    await fs.unlink(filePath);
-    next();
-  } catch (error) {
-    console.error('Error deleting file:', error);
-    next();
   }
 });
 
