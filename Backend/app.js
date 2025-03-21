@@ -11,7 +11,20 @@ const path = require("path");
 const {storage} = require("./cloudConfig.js");
 const multer = require("multer");
 const upload = multer({storage});
+
+const storage2 = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Make sure this folder exists
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload2 = multer({ storage: storage2 });
 const LabTest = require("./models/LabTest.js");
+const { spawn } = require('child_process');
 // Initialize app
 const app = express();
 
@@ -118,7 +131,7 @@ app.get('/medicinetracker', isAuthenticated, async (req, res, next) => {
     next(err);
   }
 });
-app.post('/medicinetracker/lab-tests',check,upload.single("testfile"),aftercheck,async (req,res)=>{//
+app.post('/medicinetracker/lab-tests',check,upload2.single("testfile"),aftercheck,async (req,res)=>{//
   console.log(req.body,req.file.path);
   const {testName,labName,testDate} = req.body;
   const labtest = new LabTest({testName,labName,testDate});
@@ -129,6 +142,47 @@ app.post('/medicinetracker/lab-tests',check,upload.single("testfile"),aftercheck
   }
   res.redirect("/medicinetracker");
 });
+
+app.post('/predict', upload2.single('image-input'),async (req, res) => {
+  const imagePath = req.file.path;
+  const pythonFilePath = path.join(__dirname, 'ml_model/model.py');
+
+  const python = spawn('python', [pythonFilePath, imagePath]);
+  let prediction = '';
+
+  // Listen for data from the Python process
+  python.stdout.on('data', (data) => {
+    prediction += data.toString();
+  });
+  let user1 = await User.findById(req.user._id);
+  // Handle the close event (when the Python process finishes)
+  python.on('close', (code) => {
+    // Assign the prediction to the user
+    user1.xray = prediction;
+
+    // Save the updated user in the database (optional but recommended)
+    user1.save()
+      .then(() => {
+        res.redirect("/profile");
+      })
+      .catch((err) => {
+        console.error("Error saving user:", err);
+        res.status(500).send("Internal Server Error");
+      });
+  });
+
+  // Handle Python errors
+  python.stderr.on('data', (data) => {
+    console.error(`Python stderr: ${data}`);
+  });
+
+  // Handle spawn errors
+  python.on('error', (err) => {
+    console.error("Failed to start subprocess:", err);
+    res.status(500).send("Internal Server Error");
+  });
+});
+
 
 app.get("/support", (req, res, next) => {
   try {
