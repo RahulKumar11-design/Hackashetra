@@ -25,7 +25,8 @@ const UserSchema = new Schema({
     state: { type: String },
     postalCode: { type: String },
     country: { type: String }
-  }
+  },
+  xray:{ type: String }
 });
 
 module.exports = mongoose.model('User', UserSchema);
